@@ -1,9 +1,9 @@
 import { useMemo } from 'react'
-import { createStore, applyMiddleware } from 'redux'
+import { createStore, applyMiddleware, combineReducers } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 
 let store
-interface InitialSate {
+export interface InitialSate {
   lastUpdate: number
   light: boolean
   count: number
