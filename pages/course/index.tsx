@@ -10,7 +10,7 @@ const Course = () => {
       <h1 className="text-5xl py-2">Open courses</h1>
       <div className="flex items-center">
         <Input
-          placeholder="course id..."
+          placeholder="Search..."
           className="rounded-3xl py-2 focus:border-blue-300 shadow-sm my-2"
         />
         <button
