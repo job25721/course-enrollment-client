@@ -24,7 +24,7 @@ export const Input: FunctionComponent<Props> = ({
 }) => (
   <input
     type={type}
-    className={`rounded-md border-2 border-transparent focus:border-blue-300 focus:outline-none shadow-md px-4 py-1 ${className}`}
+    className={`rounded-md border-2 border-transparent focus:outline-none px-4 py-1 ${className}`}
     placeholder={placeholder}
     value={value}
     onChange={onChange}

@@ -19,7 +19,7 @@ export const Button: React.FC<Props> = ({
   <button
     style={{ ...style, backgroundColor: bg ? bg : 'transparent' }}
     onClick={onClick}
-    className={`px-4 py-2 text-white shadow-md rounded-md focus:outline-none ${
+    className={`px-4 py-2 text-white shadow-sm rounded-md focus:outline-none ${
       mx && 'mx-' + mx.toString()
     } ${my && 'my-' + my.toString()}`}
   >

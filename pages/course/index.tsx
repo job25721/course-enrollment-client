@@ -1,36 +1,31 @@
-import { type } from 'os'
+import { Input } from '../../components/Input'
+import Navbar from '../../components/Navbar'
+import { SearchOutline } from 'react-ionicons'
+import { CourseCard } from '../../components/course/card'
 import { useState } from 'react'
-import { HomeOutline, SearchOutline } from 'react-ionicons'
-type ActiveNav = 'Home' | 'User'
-
 const Course = () => {
-  const [activeNav, setActiveNav] = useState<ActiveNav>('Home')
+  const [c, setc] = useState([1])
   return (
-    <div className="flex flex-col-reverse h-screen w-full sm:flex-row ">
-      <div className="bg-white justify-center items-center flex flex-col shadow-md w-full h-20 sm:w-20 sm:h-full">
+    <Navbar>
+      <h1 className="text-5xl py-2">Open courses</h1>
+      <div className="flex items-center">
+        <Input
+          placeholder="course id..."
+          className="rounded-3xl py-2 focus:border-blue-300 shadow-sm my-2"
+        />
         <button
-          onClick={() => setActiveNav('Home')}
-          className="my-2 focus:outline-none"
+          onClick={() => setc([...c, 0])}
+          className="px-4 py-4 rounded-3xl focus:outline-none"
         >
-          <HomeOutline
-            {...(activeNav === 'Home'
-              ? { height: '30px', width: '30px' }
-              : { color: '#f5f5f5' })}
-          />
-        </button>
-        <button
-          onClick={() => setActiveNav('User')}
-          className="my-2 focus:outline-none"
-        >
-          <SearchOutline
-            {...(activeNav === 'User'
-              ? { height: '30px', width: '30px' }
-              : { color: '#f5f5f5' })}
-          />
+          <SearchOutline />
         </button>
       </div>
-      <div className="w-full h-full"></div>
-    </div>
+      <div className="my-2 h-4/5 overflow-auto w-full sm:w-4/5  lg:w-2/4">
+        {c.map((_, i) => (
+          <CourseCard key={i.toString()} />
+        ))}
+      </div>
+    </Navbar>
   )
 }
 
