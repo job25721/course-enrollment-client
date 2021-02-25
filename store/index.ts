@@ -1,55 +1,23 @@
 import { useMemo } from 'react'
 import { createStore, applyMiddleware, combineReducers } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
+import thunk from 'redux-thunk'
+import courseReducer from './course/reducers'
+import { CourseActionTypes } from './course/types'
 
 let store
-export interface InitialSate {
-  lastUpdate: number
-  light: boolean
-  count: number
-}
-const initialState: InitialSate = {
-  lastUpdate: 0,
-  light: false,
-  count: 0,
-}
 
-const reducer = (
-  state: InitialSate = initialState,
-  action: any
-): InitialSate => {
-  switch (action.type) {
-    case 'TICK':
-      return {
-        ...state,
-        lastUpdate: action.lastUpdate,
-        light: !!action.light,
-      }
-    case 'INCREMENT':
-      return {
-        ...state,
-        count: state.count + 1,
-      }
-    case 'DECREMENT':
-      return {
-        ...state,
-        count: state.count - 1,
-      }
-    case 'RESET':
-      return {
-        ...state,
-        count: initialState.count,
-      }
-    default:
-      return state
-  }
-}
+const appReducer = combineReducers({
+  course: courseReducer,
+})
+export type RootState = ReturnType<typeof appReducer>
+export type StoreEvent = CourseActionTypes
 
-const initStore = (preloadedState = initialState) => {
+const initStore = (preloadedState: RootState | undefined) => {
   return createStore(
-    reducer,
+    appReducer,
     preloadedState,
-    composeWithDevTools(applyMiddleware())
+    composeWithDevTools(applyMiddleware(thunk))
   )
 }
 
