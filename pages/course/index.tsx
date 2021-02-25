@@ -1,7 +1,7 @@
 import { Input } from '../../components/Input'
 import Navbar from '../../components/Navbar'
 import { SearchOutline } from 'react-ionicons'
-import { CourseCard } from '../../components/course/card'
+import { CourseCard } from '../../components/course/Card'
 import { useState } from 'react'
 const Course = () => {
   const [c, setc] = useState([1])
