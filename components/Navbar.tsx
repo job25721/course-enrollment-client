@@ -48,7 +48,7 @@ const Navbar: FC = ({ children }) => {
         </button>
       </div>
       <div className="w-full h-full p-4 overflow-auto">
-        <div className="flex sm:mb-0 mb-2 items-center relative sm:absolute sm:right-5">
+        <div className="flex sm:mb-0 mb-4 items-center relative sm:absolute sm:right-5">
           <div>
             <PersonCircleOutline width="50px" height="50px" />
           </div>

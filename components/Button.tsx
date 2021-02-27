@@ -1,4 +1,4 @@
-import { CSSProperties, MouseEvent } from 'react'
+import { CSSProperties, HTMLAttributes, MouseEvent } from 'react'
 
 interface Props {
   style?: CSSProperties
@@ -8,6 +8,7 @@ interface Props {
   my?: number | string
   px?: number | string
   py?: number | string
+  className?: HTMLAttributes<HTMLButtonElement>['className']
 }
 
 export const Button: React.FC<Props> = ({
@@ -19,6 +20,7 @@ export const Button: React.FC<Props> = ({
   my,
   px = 4,
   py = 2,
+  className,
 }) => (
   <button
     onClick={onClick}
@@ -26,7 +28,7 @@ export const Button: React.FC<Props> = ({
     className={`px-${px} py-${py} text-white shadow-sm rounded-md focus:outline-none 
     ${mx && 'mx-' + mx.toString()} ${my && 'my-' + my.toString()} ${
       bg ? 'bg-' + bg : ''
-    }`}
+    } ${className}`}
   >
     {children}
   </button>

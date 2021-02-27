@@ -1,9 +1,4 @@
-import {
-  ChangeEvent,
-  FunctionComponent,
-  HTMLAttributes,
-  InputHTMLAttributes,
-} from 'react'
+import { FunctionComponent, HTMLAttributes, InputHTMLAttributes } from 'react'
 
 interface Props {
   value?: InputHTMLAttributes<HTMLInputElement>['value']
