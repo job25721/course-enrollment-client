@@ -6,6 +6,8 @@ interface Props {
   bg?: string
   mx?: number | string
   my?: number | string
+  px?: number | string
+  py?: number | string
 }
 
 export const Button: React.FC<Props> = ({
@@ -15,13 +17,16 @@ export const Button: React.FC<Props> = ({
   bg,
   mx,
   my,
+  px = 4,
+  py = 2,
 }) => (
   <button
-    style={{ ...style, backgroundColor: bg ? bg : 'transparent' }}
     onClick={onClick}
-    className={`px-4 py-2 text-white shadow-sm rounded-md focus:outline-none ${
-      mx && 'mx-' + mx.toString()
-    } ${my && 'my-' + my.toString()}`}
+    style={style}
+    className={`px-${px} py-${py} text-white shadow-sm rounded-md focus:outline-none 
+    ${mx && 'mx-' + mx.toString()} ${my && 'my-' + my.toString()} ${
+      bg ? 'bg-' + bg : ''
+    }`}
   >
     {children}
   </button>
