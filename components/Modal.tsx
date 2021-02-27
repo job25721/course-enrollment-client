@@ -27,7 +27,7 @@ export const Modal: FunctionComponent<Props> = ({
         </span>
 
         <div className="inline-block  bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-lg sm:w-full">
-          <div className="bg-red-100 flex px-4 py-2">
+          <div className="bg-blue-100 flex px-4 py-2">
             <div className="flex flex-1 items-center">
               <span>{title}</span>
             </div>
@@ -40,7 +40,7 @@ export const Modal: FunctionComponent<Props> = ({
               </button>
             </div>
           </div>
-          <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 bg-green-100">
+          <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
             {children}
           </div>
         </div>

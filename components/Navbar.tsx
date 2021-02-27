@@ -1,6 +1,11 @@
 import { useRouter } from 'next/router'
 import { FC, useEffect, useState } from 'react'
-import { HomeOutline, PersonOutline } from 'react-ionicons'
+import {
+  HomeOutline,
+  PersonOutline,
+  PersonCircleOutline,
+  LogOutOutline,
+} from 'react-ionicons'
 
 const Navbar: FC = ({ children }) => {
   const router = useRouter()
@@ -11,8 +16,8 @@ const Navbar: FC = ({ children }) => {
   }, [router.pathname])
   return (
     <div
-      className="flex flex-col-reverse h-screen w-full sm:flex-row"
-      style={{ backgroundColor: 'whitesmoke' }}
+      className="flex flex-col-reverse h-screen bg-blue- w-full sm:flex-row"
+      style={{ backgroundColor: '#f5f5f5' }}
     >
       <div className="bg-white justify-around rounded-2xl items-center flex flex-row shadow-md w-full h-20 sm:flex-col sm:w-20 sm:h-full sm:justify-center sm:shadow-md">
         <button
@@ -42,7 +47,26 @@ const Navbar: FC = ({ children }) => {
           />
         </button>
       </div>
-      <div className="w-full h-full p-4 overflow-auto">{children}</div>
+      <div className="w-full h-full p-4 overflow-auto">
+        <div className="flex sm:mb-0 mb-2 items-center relative sm:absolute sm:right-5">
+          <div>
+            <PersonCircleOutline width="50px" height="50px" />
+          </div>
+          <div className="px-2 flex-1 sm:flex-initial">
+            <p>Pathomporn Pankaew</p>
+            <p>Student</p>
+          </div>
+          <div className="px-2">
+            <button
+              className="focus:outline-none"
+              onClick={() => router.push('/')}
+            >
+              <LogOutOutline width="30px" height="30px" />
+            </button>
+          </div>
+        </div>
+        {children}
+      </div>
     </div>
   )
 }

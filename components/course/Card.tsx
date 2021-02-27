@@ -15,8 +15,8 @@ export const CourseCard = () => {
         <div className="p-3">
           <table className="table-fixed">
             <thead>
-              <th className="w-1/2">section</th>
-              <th className="w-2/3">enrolled</th>
+              <th className="w-2/4">section</th>
+              <th className="w-full">enrolled</th>
               <th></th>
             </thead>
             <tbody>
@@ -24,7 +24,7 @@ export const CourseCard = () => {
                 <td>001</td>
                 <td>2/10</td>
                 <td>
-                  <Button px={2} py={1} bg="green-400">
+                  <Button px={2} py={1} bg="green-300">
                     <span className="text-sm">Enroll</span>
                   </Button>
                 </td>

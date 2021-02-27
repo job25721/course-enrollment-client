@@ -7,7 +7,7 @@ const Course = () => {
   const [c, setc] = useState([1])
   return (
     <Navbar>
-      <h1 className="text-5xl py-2">Open courses</h1>
+      <h1 className="text-4xl py-2">Open courses</h1>
       <div className="flex items-center">
         <Input
           placeholder="Search..."
@@ -20,7 +20,7 @@ const Course = () => {
           <SearchOutline />
         </button>
       </div>
-      <div className="my-2 h-4/5 overflow-auto w-full sm:w-4/5  lg:w-2/4">
+      <div className="my-2 sm:h-5/6 h-3/4 overflow-auto w-full sm:w-4/5 lg:w-2/4">
         {c.map((_, i) => (
           <CourseCard key={i.toString()} />
         ))}

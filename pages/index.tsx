@@ -18,10 +18,18 @@ const Index = () => {
     <div className="container mx-auto h-screen flex flex-col justify-center items-center">
       <img src="/logo.png" alt="" />
       <div className="flex my-4">
-        <Button onClick={() => setOpen(!open)} mx={2} bg="#4BABDC">
+        <Button
+          onClick={() => setOpen(!open)}
+          mx={2}
+          style={{ backgroundColor: '#4BABDC' }}
+        >
           Student
         </Button>
-        <Button onClick={() => setPlaceholder('teacher')} mx={2} bg="#9ABF53">
+        <Button
+          onClick={() => setPlaceholder('teacher')}
+          mx={2}
+          style={{ backgroundColor: '#9ABF53' }}
+        >
           Teacher
         </Button>
       </div>
