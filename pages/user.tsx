@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Button } from '../components/Button'
-import { CourseCard } from '../components/course/Card'
+import { CourseCard, UserCourseCard } from '../components/course/Card'
 import Navbar from '../components/Navbar'
 
 type ProfileTabs = 'Info' | 'Courses'
@@ -52,7 +52,7 @@ const User = () => {
           </div>
           <div className="my-2 sm:h-4/5 h-4/6 overflow-auto w-full sm:w-4/5 lg:w-2/4">
             {[1, 2, 3, 4, 5].map((_, i) => (
-              <CourseCard key={i.toString()} />
+              <UserCourseCard key={i.toString()} />
             ))}
           </div>
         </>

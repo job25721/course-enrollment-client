@@ -1,5 +1,5 @@
 import { CSSProperties, HTMLAttributes, MouseEvent } from 'react'
-
+import { NextComponentType } from 'next'
 interface Props {
   style?: CSSProperties
   onClick?: (event: MouseEvent) => void
@@ -18,17 +18,18 @@ export const Button: React.FC<Props> = ({
   bg,
   mx,
   my,
-  px = 4,
-  py = 2,
-  className,
+  px,
+  py,
+  className = '',
 }) => (
   <button
     onClick={onClick}
     style={style}
-    className={`px-${px} py-${py} text-white shadow-sm rounded-md focus:outline-none 
-    ${mx && 'mx-' + mx.toString()} ${my && 'my-' + my.toString()} ${
-      bg ? 'bg-' + bg : ''
-    } ${className}`}
+    className={`px-${px ? px : 4} py-${
+      py ? py : 2
+    } text-white shadow-sm rounded-md focus:outline-none mx-${mx ? mx : 0} my${
+      my ? my : 0
+    } ${bg ? `bg-${bg}` : ''} ${className}`}
   >
     {children}
   </button>

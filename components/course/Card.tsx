@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { AlertDialog } from '../AlertDialog'
 import { Button } from '../Button'
 import { Modal } from '../Modal'
 
@@ -45,6 +46,35 @@ export const CourseCard = () => {
             style={{ backgroundColor: '#4BABDC' }}
           >
             Sections
+          </Button>
+        </div>
+      </div>
+    </>
+  )
+}
+
+export const UserCourseCard = () => {
+  const [openModal, setModalOpen] = useState<boolean>(false)
+
+  return (
+    <>
+      <AlertDialog
+        isOpen={openModal}
+        type="danger"
+        onCancel={() => setModalOpen(false)}
+        title="Drop ?"
+        content="Do you want to drop 261497 - Sel Topic in Comp Soft"
+      />
+
+      <div className="shadow-sm mb-4 rounded-lg w-full h-36 p-3 bg-white flex flex-col sm:flex-row">
+        <div className="flex flex-col justify-start sm:justify-around sm:px-2">
+          <p>261497 - Sel Topic in Comp Soft</p>
+          <p>credits : 3</p>
+          <p>lecturer : Chinawat Isradisaikul</p>
+        </div>
+        <div className="flex flex-1 items-center sm:px-4 sm:justify-end">
+          <Button onClick={() => setModalOpen(true)} className="bg-red-400">
+            Drop
           </Button>
         </div>
       </div>
