@@ -5,6 +5,7 @@ import {
   PersonOutline,
   PersonCircleOutline,
   LogOutOutline,
+  AddOutline,
 } from 'react-ionicons'
 
 const Navbar: FC = ({ children }) => {
@@ -21,10 +22,7 @@ const Navbar: FC = ({ children }) => {
     >
       <div className="bg-white justify-around rounded-2xl items-center flex flex-row shadow-md w-full h-20 sm:flex-col sm:w-20 sm:h-full sm:justify-center sm:shadow-md">
         <button
-          onClick={() => {
-            setActiveNav('Home')
-            router.push('/course')
-          }}
+          onClick={() => router.push('/course')}
           className="my-4 focus:outline-none"
         >
           <HomeOutline
@@ -34,10 +32,17 @@ const Navbar: FC = ({ children }) => {
           />
         </button>
         <button
-          onClick={() => {
-            setActiveNav('User')
-            router.push('/user')
-          }}
+          onClick={() => router.push('/add')}
+          className="my-4 focus:outline-none"
+        >
+          <AddOutline
+            {...(activeNav === '/add'
+              ? { height: '30px', width: '30px' }
+              : { color: 'rgb(200,200,200)' })}
+          />
+        </button>
+        <button
+          onClick={() => router.push('/user')}
           className="my-4 focus:outline-none"
         >
           <PersonOutline
