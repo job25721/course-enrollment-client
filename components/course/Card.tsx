@@ -1,9 +1,11 @@
 import { useState } from 'react'
+import { Course } from '../../store/course/types'
 import { AlertDialog } from '../AlertDialog'
 import { Button } from '../Button'
 import { Modal } from '../Modal'
 
-export const CourseCard = () => {
+export const CourseCard: React.FC<{ course: Course }> = ({ course }) => {
+  const { courseId, name, credit, sections, lecturer } = course
   const [openModal, setModalOpen] = useState<boolean>(false)
   return (
     <>
@@ -12,7 +14,9 @@ export const CourseCard = () => {
         isOpen={openModal}
         onCancel={() => setModalOpen(false)}
       >
-        <h1 className="text-lg">261497 - Sel Topic in comp Soft</h1>
+        <h1 className="text-lg">
+          {courseId} - {name}
+        </h1>
         <div className="p-3">
           <table className="table-fixed">
             <thead>
@@ -21,24 +25,30 @@ export const CourseCard = () => {
               <th></th>
             </thead>
             <tbody>
-              <tr>
-                <td>001</td>
-                <td>2/10</td>
-                <td>
-                  <Button px={2} py={1} bg="green-300">
-                    <span className="text-sm">Enroll</span>
-                  </Button>
-                </td>
-              </tr>
+              {sections.map((sec) => (
+                <tr key={sec.sectionId}>
+                  <td>{sec.sectionId}</td>
+                  <td>
+                    {sec.enrolledPerson.length}/{sec.seat}
+                  </td>
+                  <td>
+                    <Button px={2} py={1} bg="green-300">
+                      <span className="text-sm">Enroll</span>
+                    </Button>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
       </Modal>
       <div className="shadow-sm mb-4 rounded-lg w-full h-36 p-3 bg-white flex flex-col sm:flex-row">
         <div className="flex flex-col justify-start sm:justify-around sm:px-2">
-          <p>261497 - Sel Topic in Comp Soft</p>
-          <p>credits : 3</p>
-          <p>lecturer : Chinawat Isradisaikul</p>
+          <p>
+            {courseId} - {name}
+          </p>
+          <p>credits : {credit}</p>
+          <p>lecturer : {lecturer}</p>
         </div>
         <div className="flex flex-1 items-center sm:px-4 sm:justify-end">
           <Button

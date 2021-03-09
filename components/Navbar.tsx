@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { FC, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   HomeOutline,
   PersonOutline,
@@ -8,7 +8,7 @@ import {
   AddOutline,
 } from 'react-ionicons'
 
-const Navbar: FC = ({ children }) => {
+const Navbar: React.FC = ({ children }) => {
   const router = useRouter()
   const [activeNav, setActiveNav] = useState<string>('')
   useEffect(() => {

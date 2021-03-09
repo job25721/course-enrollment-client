@@ -7,7 +7,7 @@ interface CourseSection {
   seat: number
   day: string
   time: string
-  enrolledPerson: Student
+  enrolledPerson: Student[]
 }
 
 export interface Course {

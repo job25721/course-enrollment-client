@@ -13,6 +13,8 @@ const Index = () => {
   const [placeholder, setPlaceholder] = useState<LoginPerson>('student')
   const [open, setOpen] = useState(false)
 
+  const dispatch = useDispatch<Dispatch<StoreEvent>>()
+
   const router = useRouter()
   return (
     <div className="container mx-auto h-screen flex flex-col justify-center items-center">
