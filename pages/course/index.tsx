@@ -1,24 +1,20 @@
-import { Input } from '../../components/Input'
-import Navbar from '../../components/Navbar'
+import { Input } from '../../src/components/Input'
+import Navbar from '../../src/components/Navbar'
 import { SearchOutline } from 'react-ionicons'
-import { CourseCard } from '../../components/course/Card'
+import { CourseCard } from '../../src/components/course/Card'
 import { useEffect, useState } from 'react'
-import axios from 'axios'
-import { Course as CourseType } from '../../store/course/types'
+import { Course as CourseType } from '../../src/store/course/types'
+import { getAllCourses } from '../../src/services/course'
 const Course = () => {
-  const [c, setc] = useState([1])
-
   const [courses, setCourses] = useState<CourseType[]>([])
   const [err, setErr] = useState<string | null>(null)
 
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const res = await axios.get<CourseType[]>(
-          'http://localhost:8000/api/courses'
-        )
+        const res = await getAllCourses()
         setErr(null)
-        setCourses(res.data)
+        setCourses(res)
       } catch (err) {
         setErr(err.message)
       }
@@ -34,10 +30,7 @@ const Course = () => {
           placeholder="Search..."
           className="rounded-3xl py-2 focus:border-blue-300 shadow-sm my-2"
         />
-        <button
-          onClick={() => setc([...c, 0])}
-          className="px-4 py-4 rounded-3xl focus:outline-none"
-        >
+        <button className="px-4 py-4 rounded-3xl focus:outline-none">
           <SearchOutline />
         </button>
       </div>

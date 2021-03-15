@@ -1,6 +1,6 @@
 import 'tailwindcss/tailwind.css'
 import '../styles/globals.css'
-import { useStore } from '../store'
+import { useStore } from '../src/store'
 import { Provider } from 'react-redux'
 function MyApp({ Component, pageProps }) {
   const store = useStore(pageProps.initialReduxState)

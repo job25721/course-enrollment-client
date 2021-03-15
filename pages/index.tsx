@@ -1,10 +1,10 @@
-import { Dispatch, useState } from 'react'
+import { Dispatch, useEffect, useState } from 'react'
 import { LogInOutline } from 'react-ionicons'
-import { Button } from '../components/Button'
-import { Input } from '../components/Input'
+import { Button } from '../src/components/Button'
+import { Input } from '../src/components/Input'
 import { useRouter } from 'next/router'
 import { useDispatch, useSelector } from 'react-redux'
-import { RootState, StoreEvent } from '../store'
+import { RootState, StoreEvent } from '../src/store'
 
 type LoginPerson = 'student' | 'teacher'
 

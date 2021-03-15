@@ -1,7 +1,12 @@
-import { Student } from '../user/types'
+import { Student, Teacher } from '../user/types'
 
 // type Day = 'M-Th' | 'Tu-F' | 'Wed' | 'Sat' | 'Mon' | 'Tue' | 'Thu' | 'Fri'
 // type Time = '08:00-09:30' | ''
+export interface ApiCourseResponse {
+  message: string
+  dataResponse: Course | null
+}
+
 interface CourseSection {
   sectionId: number
   seat: number
@@ -14,7 +19,7 @@ export interface Course {
   courseId: number
   name: string
   credit: number
-  lecturer: string
+  lecturer: Teacher
   sections: CourseSection[]
 }
 

@@ -7,6 +7,7 @@ import { Modal } from '../Modal'
 export const CourseCard: React.FC<{ course: Course }> = ({ course }) => {
   const { courseId, name, credit, sections, lecturer } = course
   const [openModal, setModalOpen] = useState<boolean>(false)
+
   return (
     <>
       <Modal
@@ -48,7 +49,10 @@ export const CourseCard: React.FC<{ course: Course }> = ({ course }) => {
             {courseId} - {name}
           </p>
           <p>credits : {credit}</p>
-          <p>lecturer : {lecturer}</p>
+          <p>
+            lecturer : {lecturer.teacherInfo.firstName}{' '}
+            {lecturer.teacherInfo.lastName}
+          </p>
         </div>
         <div className="flex flex-1 items-center sm:px-4 sm:justify-end">
           <Button
