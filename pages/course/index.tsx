@@ -11,19 +11,23 @@ import { student as studentService } from 'src/services/user'
 
 const Course = () => {
   const dispatch = useDispatch<Dispatch<StoreEvent>>()
-  const [courses, setCourses] = useState<CourseType[]>([])
   const [err, setErr] = useState<string | null>(null)
   const { loginUserType, student } = useSelector(
     (state: RootState) => state.user
   )
+  const { courses } = useSelector((state: RootState) => state.course)
 
   useEffect(() => {
     const fetchNyCourse = async () => {
       if (loginUserType === 'student' && student) {
-        const enrolled = await studentService.getMyEnrolledCourses(
-          student.studentId
-        )
-        dispatch({ type: 'SET_MY_COURSES', payload: enrolled })
+        try {
+          const enrolled = await studentService.getMyEnrolledCourses(
+            student.studentId
+          )
+          dispatch({ type: 'SET_MY_COURSES', payload: enrolled })
+        } catch (err) {
+          setErr(err.message)
+        }
       }
     }
     fetchNyCourse()
@@ -34,7 +38,7 @@ const Course = () => {
       try {
         const res = await getAllCourses()
         setErr(null)
-        setCourses(res)
+        dispatch({ type: 'SET_COURSE', payload: res })
       } catch (err) {
         setErr(err.message)
       }

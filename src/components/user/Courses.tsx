@@ -2,6 +2,7 @@ import { Dispatch, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { student, teacher } from 'src/services/user'
 import { RootState, StoreEvent } from 'src/store'
+
 import { UserCourseCard } from '../course/Card'
 
 export const StudentCourses = () => {

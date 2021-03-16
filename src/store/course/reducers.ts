@@ -26,6 +26,13 @@ export default function courseReducer(
           ({ courseId }) => courseId !== action.payload
         ),
       }
+    case 'UPDATE_COURSE':
+      return {
+        ...state,
+        courses: state.courses.map((course) =>
+          course.courseId === action.payload.courseId ? action.payload : course
+        ),
+      }
     default:
       return state
   }

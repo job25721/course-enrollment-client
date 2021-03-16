@@ -4,7 +4,7 @@ import { Student, Teacher } from '../user/types'
 // type Time = '08:00-09:30' | ''
 export interface ApiCourseResponse {
   message: string
-  dataResponse: Course | null
+  dataResponse: Course
 }
 
 interface CourseSection {
@@ -31,3 +31,4 @@ export type CourseActionTypes =
   | { type: 'SET_COURSE'; payload: Course[] }
   | { type: 'ADD_COURSE'; payload: Course }
   | { type: 'REMOVE_COURSE'; payload: number }
+  | { type: 'UPDATE_COURSE'; payload: Course }

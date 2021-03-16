@@ -1,19 +1,62 @@
-import { useState } from 'react'
-import { useSelector } from 'react-redux'
-import { RootState } from 'src/store'
+import { Dispatch, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState, StoreEvent } from 'src/store'
 import { UserType } from 'src/store/user/types'
 import { Course } from '../../store/course/types'
-import { AlertDialog } from '../AlertDialog'
+import { AlertDialog, AlertTypes } from '../AlertDialog'
 import { Button } from '../Button'
 import { Modal } from '../Modal'
+import { student as studentService } from 'src/services/user'
 
 export const CourseCard: React.FC<{ course: Course }> = ({ course }) => {
   const { courseId, name, credit, sections, lecturer } = course
+  const dispatch = useDispatch<Dispatch<StoreEvent>>()
   const [openModal, setModalOpen] = useState<boolean>(false)
-  const { student, myCourses } = useSelector((state: RootState) => state.user)
+  const { loginUserType, student, myCourses } = useSelector(
+    (state: RootState) => state.user
+  )
+  const [alertMessage, setMessage] = useState<{
+    message: string
+    type: AlertTypes
+    open: boolean
+  }>({ message: '', type: 'success', open: false })
+
+  const enroll = async (sectionId: number) => {
+    if (loginUserType === 'student' && student) {
+      try {
+        const res = await studentService.enrollCourse(
+          courseId,
+          sectionId,
+          student.studentId
+        )
+        dispatch({ type: 'UPDATE_COURSE', payload: res.dataResponse })
+        dispatch({ type: 'ADD_MY_COURSES', payload: res.dataResponse })
+        setMessage({
+          ...alertMessage,
+          open: true,
+          message: res.message,
+          type: 'success',
+        })
+      } catch (err) {
+        setMessage({
+          ...alertMessage,
+          open: true,
+          message: err.message,
+          type: 'danger',
+        })
+      }
+    }
+  }
 
   return (
     <>
+      <AlertDialog
+        title={alertMessage.message}
+        hasCancel={false}
+        isOpen={alertMessage.open}
+        type={alertMessage.type}
+        onConfirm={() => setMessage({ ...alertMessage, open: false })}
+      />
       <Modal
         title="Section manager"
         isOpen={openModal}
@@ -41,10 +84,12 @@ export const CourseCard: React.FC<{ course: Course }> = ({ course }) => {
                   <td>
                     {student && (
                       <Button
-                        onClick={() => alert()}
-                        disabled={myCourses.some(
-                          (course) => course.courseId === courseId
-                        )}
+                        onClick={() => enroll(sec.sectionId)}
+                        disabled={
+                          myCourses.some(
+                            (course) => course.courseId === courseId
+                          ) || sec.enrolledPerson.length === sec.seat
+                        }
                         px={2}
                         py={1}
                         bg="green-300"
@@ -87,13 +132,67 @@ export const UserCourseCard: React.FC<{ course: Course; type: UserType }> = ({
   course,
   type = 'student',
 }) => {
+  const dispatch = useDispatch<Dispatch<StoreEvent>>()
   const [openModal, setModalOpen] = useState<boolean>(false)
+  const [alertMessage, setMessage] = useState<{
+    message: string
+    type: AlertTypes
+    open: boolean
+    completeData?: number
+  }>({ message: '', type: 'success', open: false })
+  const { student } = useSelector((state: RootState) => state.user)
+
   const { firstName, lastName } = course.lecturer.teacherInfo
+
+  const drop = async () => {
+    try {
+      setModalOpen(false)
+      if (type === 'student' && student) {
+        const secId = course.sections.find((sec) =>
+          sec.enrolledPerson.find((p) => p.studentId === student?.studentId)
+        )?.sectionId
+        if (secId) {
+          const res = await studentService.dropCourse(
+            course.courseId,
+            secId,
+            student?.studentId
+          )
+          setMessage({
+            message: res.message,
+            type: 'success',
+            open: true,
+            completeData: res.dataResponse.courseId,
+          })
+        }
+      }
+    } catch (err) {
+      console.log(err)
+
+      setMessage({ message: err.message, type: 'danger', open: true })
+    }
+  }
+
   return (
     <>
       <AlertDialog
+        title={alertMessage.message}
+        isOpen={alertMessage.open}
+        type={alertMessage.type}
+        onConfirm={() => {
+          if (alertMessage.completeData) {
+            setMessage({ ...alertMessage, open: false })
+            dispatch({
+              type: 'DELETE_MY_COURSE',
+              payload: alertMessage.completeData,
+            })
+          }
+        }}
+        hasCancel={false}
+      />
+      <AlertDialog
         isOpen={openModal}
         type="danger"
+        onConfirm={drop}
         onCancel={() => setModalOpen(false)}
         title={type === 'student' ? 'Drop ?' : 'Close ?'}
         content={`Do you want to ${type === 'student' ? 'drop' : 'close'} ${
