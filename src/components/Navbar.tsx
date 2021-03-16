@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { Dispatch, useEffect } from 'react'
+
 import {
   HomeOutline,
   PersonOutline,
@@ -7,14 +8,27 @@ import {
   LogOutOutline,
   AddOutline,
 } from 'react-ionicons'
+import { useDispatch } from 'react-redux'
+import { StoreEvent } from 'src/store'
+import { StoredLocalStorageUser, Student, Teacher } from 'src/store/user/types'
 
 const Navbar: React.FC = ({ children }) => {
   const router = useRouter()
-  const [activeNav, setActiveNav] = useState<string>('')
+  const { pathname } = router
+
+  const dispatch = useDispatch<Dispatch<StoreEvent>>()
+
   useEffect(() => {
-    console.log(router.pathname)
-    setActiveNav(router.pathname)
-  }, [router.pathname])
+    const localStoredUser = localStorage.getItem('user')
+    if (localStoredUser) {
+      const user: StoredLocalStorageUser = JSON.parse(localStoredUser)
+      if (user.type === 'student') {
+        dispatch({ type: 'SET_STUDENT', payload: user.data<Student>() })
+      } else {
+        dispatch({ type: 'SET_TEACHER', payload: user.data<Teacher>() })
+      }
+    }
+  }, [])
   return (
     <div
       className="flex flex-col-reverse h-screen bg-blue- w-full sm:flex-row"
@@ -26,7 +40,7 @@ const Navbar: React.FC = ({ children }) => {
           className="my-4 focus:outline-none"
         >
           <HomeOutline
-            {...(activeNav === '/course'
+            {...(pathname === '/course'
               ? { height: '30px', width: '30px' }
               : { color: 'rgb(200,200,200)' })}
           />
@@ -36,7 +50,7 @@ const Navbar: React.FC = ({ children }) => {
           className="my-4 focus:outline-none"
         >
           <AddOutline
-            {...(activeNav === '/add'
+            {...(pathname === '/add'
               ? { height: '30px', width: '30px' }
               : { color: 'rgb(200,200,200)' })}
           />
@@ -46,7 +60,7 @@ const Navbar: React.FC = ({ children }) => {
           className="my-4 focus:outline-none"
         >
           <PersonOutline
-            {...(activeNav === '/user'
+            {...(pathname === '/user'
               ? { height: '30px', width: '30px' }
               : { color: 'rgb(200,200,200)' })}
           />

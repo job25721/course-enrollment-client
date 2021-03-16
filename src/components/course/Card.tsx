@@ -21,9 +21,11 @@ export const CourseCard: React.FC<{ course: Course }> = ({ course }) => {
         <div className="p-3">
           <table className="table-fixed">
             <thead>
-              <th className="w-2/4">section</th>
-              <th className="w-full">enrolled</th>
-              <th></th>
+              <tr>
+                <th className="w-2/4">section</th>
+                <th className="w-full">enrolled</th>
+                <th></th>
+              </tr>
             </thead>
             <tbody>
               {sections.map((sec) => (

@@ -4,14 +4,17 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 import thunk from 'redux-thunk'
 import courseReducer from './course/reducers'
 import { CourseActionTypes } from './course/types'
+import userReducer from './user/reducer'
+import { UserActionTypes } from './user/types'
 
-let store
+let store: any
 
 const appReducer = combineReducers({
   course: courseReducer,
+  user: userReducer,
 })
 export type RootState = ReturnType<typeof appReducer>
-export type StoreEvent = CourseActionTypes
+export type StoreEvent = CourseActionTypes | UserActionTypes
 
 const initStore = (preloadedState: RootState | undefined) => {
   return createStore(
@@ -21,7 +24,7 @@ const initStore = (preloadedState: RootState | undefined) => {
   )
 }
 
-export const initializeStore = (preloadedState) => {
+export const initializeStore = (preloadedState: any) => {
   let _store = store ?? initStore(preloadedState)
 
   // After navigating to a page with an initial Redux state, merge that state
@@ -43,7 +46,7 @@ export const initializeStore = (preloadedState) => {
   return _store
 }
 
-export function useStore(initialState) {
+export function useStore(initialState: any) {
   const store = useMemo(() => initializeStore(initialState), [initialState])
   return store
 }

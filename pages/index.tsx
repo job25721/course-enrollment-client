@@ -1,27 +1,41 @@
-import { Dispatch, useEffect, useState } from 'react'
+import { useState } from 'react'
 import { LogInOutline } from 'react-ionicons'
 import { Button } from '../src/components/Button'
 import { Input } from '../src/components/Input'
 import { useRouter } from 'next/router'
-import { useDispatch, useSelector } from 'react-redux'
-import { RootState, StoreEvent } from '../src/store'
-
-type LoginPerson = 'student' | 'teacher'
+import { UserType } from '../src/store/user/types'
+import { student, teacher } from 'src/services/user'
 
 const Index = () => {
   const [loginId, setLogin] = useState<string>('')
-  const [placeholder, setPlaceholder] = useState<LoginPerson>('student')
-  const [open, setOpen] = useState(false)
-
-  const dispatch = useDispatch<Dispatch<StoreEvent>>()
+  const [placeholder, setPlaceholder] = useState<UserType>('student')
 
   const router = useRouter()
+
+  const login = async (e) => {
+    e.preventDefault()
+    try {
+      if (placeholder === 'student' && loginId !== '') {
+        const res = await student.login(+loginId)
+        if (res.message === 'Login Successful') {
+          const stdInfo = await student.getMyInfo(+loginId)
+          localStorage.setItem('user', JSON.stringify(stdInfo))
+          router.push('/course')
+        }
+      } else if (placeholder === 'teacher' && loginId !== '') {
+        await teacher.login(loginId)
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
   return (
     <div className="container mx-auto h-screen flex flex-col justify-center items-center">
       <img src="/logo.png" alt="" />
       <div className="flex my-4">
         <Button
-          onClick={() => setOpen(!open)}
+          onClick={() => setPlaceholder('student')}
           mx={2}
           style={{ backgroundColor: '#4BABDC' }}
         >
@@ -35,13 +49,7 @@ const Index = () => {
           Teacher
         </Button>
       </div>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault()
-          router.push('/course')
-        }}
-        className="flex"
-      >
+      <form onSubmit={login} className="flex">
         <Input
           type="text"
           className="rounded-3xl w-auto"

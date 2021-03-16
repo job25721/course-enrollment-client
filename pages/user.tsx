@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Button } from '../src/components/Button'
-import { CourseCard, UserCourseCard } from '../src/components/course/Card'
+import { UserCourseCard } from '../src/components/course/Card'
 import Navbar from '../src/components/Navbar'
 
 type ProfileTabs = 'Info' | 'Courses'

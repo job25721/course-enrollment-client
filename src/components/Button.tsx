@@ -1,5 +1,5 @@
 import { CSSProperties, HTMLAttributes, MouseEvent } from 'react'
-import { NextComponentType } from 'next'
+
 interface Props {
   style?: CSSProperties
   onClick?: (event: MouseEvent) => void

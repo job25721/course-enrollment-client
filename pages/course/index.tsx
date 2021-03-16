@@ -5,6 +5,7 @@ import { CourseCard } from '../../src/components/course/Card'
 import { useEffect, useState } from 'react'
 import { Course as CourseType } from '../../src/store/course/types'
 import { getAllCourses } from '../../src/services/course'
+
 const Course = () => {
   const [courses, setCourses] = useState<CourseType[]>([])
   const [err, setErr] = useState<string | null>(null)
