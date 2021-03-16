@@ -42,7 +42,11 @@ const Index = () => {
         }
       }
     } catch (err) {
-      console.log(err)
+      setMessage({
+        message: err.message,
+        type: 'danger',
+        open: true,
+      })
     }
   }
 
@@ -64,14 +68,20 @@ const Index = () => {
       <img src="/logo.png" alt="" />
       <div className="flex my-4">
         <Button
-          onClick={() => setPlaceholder('student')}
+          onClick={() => {
+            setPlaceholder('student')
+            setLogin('')
+          }}
           mx={2}
           style={{ backgroundColor: '#4BABDC' }}
         >
           Student
         </Button>
         <Button
-          onClick={() => setPlaceholder('teacher')}
+          onClick={() => {
+            setPlaceholder('teacher')
+            setLogin('')
+          }}
           mx={2}
           style={{ backgroundColor: '#9ABF53' }}
         >
