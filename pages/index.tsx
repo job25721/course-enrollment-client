@@ -1,29 +1,45 @@
-import { useState } from 'react'
+import { FormEvent, useState } from 'react'
 import { LogInOutline } from 'react-ionicons'
 import { Button } from '../src/components/Button'
 import { Input } from '../src/components/Input'
 import { useRouter } from 'next/router'
 import { UserType } from '../src/store/user/types'
 import { student, teacher } from 'src/services/user'
+import { AlertDialog, AlertTypes } from 'src/components/AlertDialog'
 
 const Index = () => {
+  const router = useRouter()
   const [loginId, setLogin] = useState<string>('')
   const [placeholder, setPlaceholder] = useState<UserType>('student')
+  const [loginMessage, setMessage] = useState<{
+    message: string
+    type: AlertTypes
+    open: boolean
+  }>({ message: '', type: 'success', open: false })
 
-  const router = useRouter()
-
-  const login = async (e) => {
+  const login = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     try {
-      if (placeholder === 'student' && loginId !== '') {
-        const res = await student.login(+loginId)
-        if (res.message === 'Login Successful') {
-          const stdInfo = await student.getMyInfo(+loginId)
-          localStorage.setItem('user', JSON.stringify(stdInfo))
-          router.push('/course')
+      let res
+      if (loginId !== '') {
+        if (placeholder === 'student') {
+          res = await student.login(+loginId)
+        } else if (placeholder === 'teacher') {
+          res = await teacher.login(loginId)
         }
-      } else if (placeholder === 'teacher' && loginId !== '') {
-        await teacher.login(loginId)
+        if (res) {
+          if (res.message === 'Login Successful') {
+            localStorage.setItem(
+              'user',
+              JSON.stringify({ type: placeholder, data: res.dataResponse })
+            )
+          }
+          setMessage({
+            message: res.message,
+            type: res.message === 'Login Successful' ? 'success' : 'danger',
+            open: true,
+          })
+        }
       }
     } catch (err) {
       console.log(err)
@@ -32,6 +48,19 @@ const Index = () => {
 
   return (
     <div className="container mx-auto h-screen flex flex-col justify-center items-center">
+      <AlertDialog
+        isOpen={loginMessage.open}
+        title={loginMessage.message}
+        type={loginMessage.type}
+        hasCancel={false}
+        onConfirm={() => {
+          if (loginMessage.type === 'success') {
+            router.push('/course')
+          } else {
+            setMessage({ ...loginMessage, open: false })
+          }
+        }}
+      />
       <img src="/logo.png" alt="" />
       <div className="flex my-4">
         <Button

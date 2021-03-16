@@ -26,7 +26,7 @@ export const Modal: FunctionComponent<Props> = ({
           &#8203;
         </span>
 
-        <div className="inline-block  bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-lg sm:w-full">
+        <div className="inline-block w-full bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-lg sm:w-full">
           <div className="bg-blue-100 flex px-4 py-2">
             <div className="flex flex-1 items-center">
               <span>{title}</span>

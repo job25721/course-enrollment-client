@@ -1,9 +1,10 @@
 import { UserActionTypes, UserState } from './types'
 
 const initailState: UserState = {
-  loginUser: 'student',
+  loginUserType: null,
   student: null,
   teacher: null,
+  myCourses: [],
 }
 
 export default function userReducer(
@@ -14,7 +15,7 @@ export default function userReducer(
     case 'SET_USER_TYPE':
       return {
         ...state,
-        loginUser: action.payload,
+        loginUserType: action.payload,
       }
     case 'SET_STUDENT':
       return {
@@ -25,6 +26,23 @@ export default function userReducer(
       return {
         ...state,
         teacher: action.payload,
+      }
+    case 'SET_MY_COURSES':
+      return {
+        ...state,
+        myCourses: action.payload,
+      }
+    case 'ADD_MY_COURSES':
+      return {
+        ...state,
+        myCourses: [...state.myCourses, action.payload],
+      }
+    case 'DELETE_MY_COURSE':
+      return {
+        ...state,
+        myCourses: state.myCourses.filter(
+          (course) => course.courseId !== action.payload
+        ),
       }
     default:
       return state

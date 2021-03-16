@@ -1,8 +1,19 @@
+import { Course } from '../course/types'
+
 export type UserType = 'student' | 'teacher'
 interface UserInfo {
   firstName: string
   lastName: string
   userType: UserType
+}
+
+export interface LoginStudentResponse {
+  message: string
+  dataResponse: Student
+}
+export interface LoginTeacherResponse {
+  message: string
+  dataResponse: Teacher
 }
 
 export interface StoredLocalStorageUser {
@@ -26,12 +37,16 @@ export interface Teacher {
 }
 
 export interface UserState {
-  loginUser: UserType
+  loginUserType: UserType | null
   student: Student | null
   teacher: Teacher | null
+  myCourses: Course[]
 }
 
 export type UserActionTypes =
-  | { type: 'SET_USER_TYPE'; payload: UserType }
-  | { type: 'SET_STUDENT'; payload: Student }
-  | { type: 'SET_TEACHER'; payload: Teacher }
+  | { type: 'SET_USER_TYPE'; payload: UserType | null }
+  | { type: 'SET_STUDENT'; payload: Student | null }
+  | { type: 'SET_TEACHER'; payload: Teacher | null }
+  | { type: 'SET_MY_COURSES'; payload: Course[] }
+  | { type: 'ADD_MY_COURSES'; payload: Course }
+  | { type: 'DELETE_MY_COURSE'; payload: number }

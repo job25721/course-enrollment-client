@@ -5,7 +5,7 @@ import {
   WarningOutline,
 } from 'react-ionicons'
 
-type AlertTypes = 'danger' | 'warning' | 'success'
+export type AlertTypes = 'danger' | 'warning' | 'success'
 
 interface Props {
   title?: string
@@ -14,6 +14,7 @@ interface Props {
   onCancel?: DOMAttributes<HTMLButtonElement>['onClick']
   type: AlertTypes
   isOpen?: boolean
+  hasCancel?: boolean
 }
 
 export const AlertDialog: FunctionComponent<Props> = ({
@@ -23,6 +24,7 @@ export const AlertDialog: FunctionComponent<Props> = ({
   onCancel,
   type,
   isOpen = false,
+  hasCancel = true,
 }) => {
   if (!isOpen) {
     return null
@@ -39,7 +41,7 @@ export const AlertDialog: FunctionComponent<Props> = ({
           &#8203;
         </span>
 
-        <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+        <div className="inline-block w-full align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
           <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
             <div className="sm:flex sm:items-start">
               <div
@@ -97,12 +99,14 @@ export const AlertDialog: FunctionComponent<Props> = ({
             >
               OK
             </button>
-            <button
-              onClick={onCancel}
-              className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none  sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-            >
-              Cancel
-            </button>
+            {hasCancel && (
+              <button
+                onClick={onCancel}
+                className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none  sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+              >
+                Cancel
+              </button>
+            )}
           </div>
         </div>
       </div>

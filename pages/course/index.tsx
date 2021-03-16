@@ -2,13 +2,32 @@ import { Input } from '../../src/components/Input'
 import Navbar from '../../src/components/Navbar'
 import { SearchOutline } from 'react-ionicons'
 import { CourseCard } from '../../src/components/course/Card'
-import { useEffect, useState } from 'react'
+import { Dispatch, useEffect, useState } from 'react'
 import { Course as CourseType } from '../../src/store/course/types'
 import { getAllCourses } from '../../src/services/course'
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState, StoreEvent } from 'src/store'
+import { student as studentService } from 'src/services/user'
 
 const Course = () => {
+  const dispatch = useDispatch<Dispatch<StoreEvent>>()
   const [courses, setCourses] = useState<CourseType[]>([])
   const [err, setErr] = useState<string | null>(null)
+  const { loginUserType, student } = useSelector(
+    (state: RootState) => state.user
+  )
+
+  useEffect(() => {
+    const fetchNyCourse = async () => {
+      if (loginUserType === 'student' && student) {
+        const enrolled = await studentService.getMyEnrolledCourses(
+          student.studentId
+        )
+        dispatch({ type: 'SET_MY_COURSES', payload: enrolled })
+      }
+    }
+    fetchNyCourse()
+  }, [student])
 
   useEffect(() => {
     const fetchCourses = async () => {

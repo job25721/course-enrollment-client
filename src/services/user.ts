@@ -1,11 +1,16 @@
 import { ApiCourseResponse, Course } from '../store/course/types'
-import { Student, Teacher } from '../store/user/types'
+import {
+  LoginStudentResponse,
+  LoginTeacherResponse,
+  Student,
+  Teacher,
+} from '../store/user/types'
 import api from './api'
 
 const teacher = {
   login: (email: string) =>
     api
-      .post<ApiCourseResponse>('/user/teacher/login', { tEmail: email })
+      .post<LoginTeacherResponse>('/user/teacher/login', { tEmail: email })
       .then((res) => res.data),
   getMyInfo: (email: string) =>
     api
@@ -20,7 +25,7 @@ const teacher = {
 const student = {
   login: (stdId: number) =>
     api
-      .post<ApiCourseResponse>('/user/std/login', { stdId })
+      .post<LoginStudentResponse>('/user/std/login', { stdId })
       .then((res) => res.data),
   getMyInfo: (sid: number) =>
     api

@@ -7,25 +7,34 @@ import {
   PersonCircleOutline,
   LogOutOutline,
   AddOutline,
+  LogInOutline,
 } from 'react-ionicons'
-import { useDispatch } from 'react-redux'
-import { StoreEvent } from 'src/store'
-import { StoredLocalStorageUser, Student, Teacher } from 'src/store/user/types'
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState, StoreEvent } from 'src/store'
 
 const Navbar: React.FC = ({ children }) => {
   const router = useRouter()
   const { pathname } = router
 
   const dispatch = useDispatch<Dispatch<StoreEvent>>()
+  const { student, teacher } = useSelector((state: RootState) => state.user)
+
+  useEffect(() => {
+    console.log(student)
+    console.log(teacher)
+  }, [teacher, student])
 
   useEffect(() => {
     const localStoredUser = localStorage.getItem('user')
     if (localStoredUser) {
-      const user: StoredLocalStorageUser = JSON.parse(localStoredUser)
+      const user = JSON.parse(localStoredUser)
+      dispatch({ type: 'SET_USER_TYPE', payload: user.type })
       if (user.type === 'student') {
-        dispatch({ type: 'SET_STUDENT', payload: user.data<Student>() })
+        dispatch({ type: 'SET_STUDENT', payload: user.data })
+        dispatch({ type: 'SET_TEACHER', payload: null })
       } else {
-        dispatch({ type: 'SET_TEACHER', payload: user.data<Teacher>() })
+        dispatch({ type: 'SET_TEACHER', payload: user.data })
+        dispatch({ type: 'SET_STUDENT', payload: null })
       }
     }
   }, [])
@@ -45,16 +54,18 @@ const Navbar: React.FC = ({ children }) => {
               : { color: 'rgb(200,200,200)' })}
           />
         </button>
-        <button
-          onClick={() => router.push('/add')}
-          className="my-4 focus:outline-none"
-        >
-          <AddOutline
-            {...(pathname === '/add'
-              ? { height: '30px', width: '30px' }
-              : { color: 'rgb(200,200,200)' })}
-          />
-        </button>
+        {teacher && (
+          <button
+            onClick={() => router.push('/add')}
+            className="my-4 focus:outline-none"
+          >
+            <AddOutline
+              {...(pathname === '/add'
+                ? { height: '30px', width: '30px' }
+                : { color: 'rgb(200,200,200)' })}
+            />
+          </button>
+        )}
         <button
           onClick={() => router.push('/user')}
           className="my-4 focus:outline-none"
@@ -68,21 +79,48 @@ const Navbar: React.FC = ({ children }) => {
       </div>
       <div className="w-full h-full p-4 overflow-auto">
         <div className="flex sm:mb-0 mb-4 items-center relative sm:absolute sm:right-5">
-          <div>
-            <PersonCircleOutline width="50px" height="50px" />
-          </div>
-          <div className="px-2 flex-1 sm:flex-initial">
-            <p>Pathomporn Pankaew</p>
-            <p>Student</p>
-          </div>
-          <div className="px-2">
-            <button
-              className="focus:outline-none"
-              onClick={() => router.push('/')}
-            >
-              <LogOutOutline width="30px" height="30px" />
-            </button>
-          </div>
+          {teacher || student ? (
+            <>
+              <div>
+                <PersonCircleOutline width="50px" height="50px" />
+              </div>
+              <div className="px-2 flex-1 sm:flex-initial">
+                <p>
+                  {(student &&
+                    `${student.studentInfo.firstName} ${student.studentInfo.lastName}`) ||
+                    (teacher &&
+                      `${teacher.teacherInfo.firstName} ${teacher.teacherInfo.lastName}`)}
+                </p>
+                <p>{student ? 'Student' : 'Teacher'}</p>
+              </div>
+              <div className="px-2">
+                <button
+                  className="focus:outline-none"
+                  onClick={() => router.push('/')}
+                >
+                  <LogOutOutline
+                    onClick={() => {
+                      localStorage.removeItem('user')
+                      router.push('/')
+                    }}
+                    color="red"
+                    width="30px"
+                    height="30px"
+                  />
+                </button>
+              </div>
+            </>
+          ) : (
+            <>
+              <span className="px-2">Login</span>
+              <LogInOutline
+                onClick={() => router.push('/')}
+                color="green"
+                width="35px"
+                height="35px"
+              />
+            </>
+          )}
         </div>
         {children}
       </div>
