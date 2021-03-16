@@ -20,11 +20,6 @@ const Navbar: React.FC = ({ children }) => {
   const { student, teacher } = useSelector((state: RootState) => state.user)
 
   useEffect(() => {
-    console.log(student)
-    console.log(teacher)
-  }, [teacher, student])
-
-  useEffect(() => {
     const localStoredUser = localStorage.getItem('user')
     if (localStoredUser) {
       const user = JSON.parse(localStoredUser)
@@ -66,16 +61,18 @@ const Navbar: React.FC = ({ children }) => {
             />
           </button>
         )}
-        <button
-          onClick={() => router.push('/user')}
-          className="my-4 focus:outline-none"
-        >
-          <PersonOutline
-            {...(pathname === '/user'
-              ? { height: '30px', width: '30px' }
-              : { color: 'rgb(200,200,200)' })}
-          />
-        </button>
+        {(student || teacher) && (
+          <button
+            onClick={() => router.push('/user')}
+            className="my-4 focus:outline-none"
+          >
+            <PersonOutline
+              {...(pathname === '/user'
+                ? { height: '30px', width: '30px' }
+                : { color: 'rgb(200,200,200)' })}
+            />
+          </button>
+        )}
       </div>
       <div className="w-full h-full p-4 overflow-auto">
         <div className="flex sm:mb-0 mb-4 items-center relative sm:absolute sm:right-5">
