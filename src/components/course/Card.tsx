@@ -8,6 +8,7 @@ import { Button } from '../Button'
 import { Modal } from '../Modal'
 import { student as studentService } from 'src/services/user'
 
+export const maxCredit = 22
 export const CourseCard: React.FC<{ course: Course }> = ({ course }) => {
   const { courseId, name, credit, sections, lecturer } = course
   const dispatch = useDispatch<Dispatch<StoreEvent>>()
@@ -62,6 +63,11 @@ export const CourseCard: React.FC<{ course: Course }> = ({ course }) => {
         isOpen={openModal}
         onCancel={() => setModalOpen(false)}
       >
+        {myCourses
+          .map((course) => course.credit)
+          .reduce((acc, cur) => acc + cur, 0) === maxCredit && (
+          <p className="text-red-500">*หน่วยกิตเต็ม</p>
+        )}
         <h1 className="text-lg">
           {courseId} - {name}
         </h1>
@@ -89,7 +95,11 @@ export const CourseCard: React.FC<{ course: Course }> = ({ course }) => {
                         disabled={
                           myCourses.some(
                             (course) => course.courseId === courseId
-                          ) || sec.enrolledPerson.length === sec.seat
+                          ) ||
+                          sec.enrolledPerson.length === sec.seat ||
+                          myCourses
+                            .map((course) => course.credit)
+                            .reduce((acc, cur) => acc + cur, 0) === maxCredit
                         }
                         px={2}
                         py={1}

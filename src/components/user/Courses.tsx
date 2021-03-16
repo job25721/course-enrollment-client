@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { student, teacher } from 'src/services/user'
 import { RootState, StoreEvent } from 'src/store'
 
-import { UserCourseCard } from '../course/Card'
+import { UserCourseCard, maxCredit } from '../course/Card'
 
 export const StudentCourses = () => {
   const dispatch = useDispatch<Dispatch<StoreEvent>>()
@@ -29,7 +29,7 @@ export const StudentCourses = () => {
           {myCourses
             .map((course) => course.credit)
             .reduce((acc, cur) => acc + cur, 0)}
-          /22 หน่วยกิต
+          /{maxCredit} หน่วยกิต
         </p>
         <p>Your expected GPAX : 4.00</p>
       </div>
