@@ -79,7 +79,8 @@ export const CourseCard: React.FC<{ course: Course }> = ({ course }) => {
                 <tr key={sec.sectionId}>
                   <td>{sec.sectionId}</td>
                   <td>
-                    {sec.enrolledPerson.length}/{sec.seat}
+                    {sec.enrolledPerson.length}/
+                    {sec.seat + sec.enrolledPerson.length}
                   </td>
                   <td>
                     {student && (
