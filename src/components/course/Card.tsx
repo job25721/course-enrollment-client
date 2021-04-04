@@ -1,4 +1,4 @@
-import { Dispatch, useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState, StoreEvent } from 'src/store'
 import { UserType } from 'src/store/user/types'
@@ -8,6 +8,7 @@ import { Button } from '../Button'
 import { Modal } from '../Modal'
 import { student as studentService } from 'src/services/user'
 import { removeCourse } from 'src/services/course'
+import { ExpectGpa } from '../user/Courses'
 export const maxCredit = 22
 export const CourseCard: React.FC<{ course: Course }> = ({ course }) => {
   const { courseId, name, credit, sections, lecturer } = course
@@ -142,10 +143,34 @@ export const CourseCard: React.FC<{ course: Course }> = ({ course }) => {
     </>
   )
 }
-
-export const UserCourseCard: React.FC<{ course: Course; type: UserType }> = ({
+type Grade = 'A' | 'B+' | 'B' | 'C+' | 'C' | 'D+' | 'D' | 'F' | 'W'
+interface Gpa {
+  key: Grade
+  value: number
+}
+const GPA: Gpa[] = [
+  { key: 'A', value: 4.0 },
+  { key: 'B+', value: 3.5 },
+  { key: 'B', value: 3.0 },
+  { key: 'C+', value: 2.5 },
+  { key: 'C', value: 2.0 },
+  { key: 'D+', value: 1.5 },
+  { key: 'D', value: 1.0 },
+  { key: 'F', value: 0 },
+  { key: 'W', value: -1 },
+]
+interface UserCourseCardProps {
+  course: Course
+  type: UserType
+  ctx?: {
+    expected: ExpectGpa[]
+    setExpected: Dispatch<SetStateAction<ExpectGpa[]>>
+  }
+}
+export const UserCourseCard: React.FC<UserCourseCardProps> = ({
   course,
   type = 'student',
+  ctx,
 }) => {
   const dispatch = useDispatch<Dispatch<StoreEvent>>()
   const [sectionsModal, setSectionModal] = useState<boolean>(false)
@@ -296,7 +321,8 @@ export const UserCourseCard: React.FC<{ course: Course; type: UserType }> = ({
             Lecturer : {firstName} {lastName}
           </p>
         </div>
-        <div className="flex flex-1 items-center sm:px-4 sm:justify-end">
+
+        <div className={`flex  flex-1 items-center sm:px-4 sm:justify-end`}>
           {type === 'teacher' && (
             <Button
               className="bg-blue-400 mx-2"
@@ -305,9 +331,31 @@ export const UserCourseCard: React.FC<{ course: Course; type: UserType }> = ({
               Sections
             </Button>
           )}
-          <Button onClick={() => setModalOpen(true)} className="bg-red-400">
-            {type === 'student' ? 'Drop' : 'Delete'}
-          </Button>
+          <div className="flex flex-col items-end">
+            <label>Expected GPA</label>
+            <select
+              value={ctx?.expected.find((c) => c.id === course.courseId)?.gpa}
+              onChange={({ target }) =>
+                ctx?.setExpected(
+                  ctx.expected.map((item) =>
+                    item.id === course.courseId
+                      ? { ...item, gpa: parseFloat(target.value) }
+                      : item
+                  )
+                )
+              }
+              className="px-4 py-2 rounded shadow-sm focus:outline-none cursor-pointer mb-2"
+            >
+              {GPA.map(({ key, value }) => (
+                <option key={key} value={value}>
+                  {key}
+                </option>
+              ))}
+            </select>
+            <Button onClick={() => setModalOpen(true)} className="bg-red-400">
+              {type === 'student' ? 'Drop' : 'Delete'}
+            </Button>
+          </div>
         </div>
       </div>
     </>
