@@ -16,16 +16,17 @@ const User = () => {
       <div className="sm:justify-start flex justify-around">
         <Button
           onClick={() => setCurrent('Info')}
-          className="sm:mx-2 mx-0"
-          bg={currentTab === 'Info' ? 'blue-400' : 'gray-200'}
-          px={10}
+          className={`sm:mx-2 mx-0 px-10 ${
+            currentTab === 'Info' ? 'bg-blue-400' : 'bg-gray-200'
+          }`}
         >
           Info
         </Button>
         <Button
           onClick={() => setCurrent('Courses')}
-          className="sm:mx-2 mx-0"
-          bg={currentTab === 'Courses' ? 'green-300' : 'gray-200'}
+          className={`sm:mx-2 mx-0 ${
+            currentTab === 'Courses' ? 'bg-blue-400' : 'bg-gray-200'
+          }`}
         >
           Your courses
         </Button>

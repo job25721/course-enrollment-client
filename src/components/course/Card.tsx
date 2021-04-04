@@ -1,13 +1,13 @@
-import { Dispatch, useState } from 'react'
+import { Dispatch, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState, StoreEvent } from 'src/store'
 import { UserType } from 'src/store/user/types'
-import { Course } from '../../store/course/types'
+import { Course, CourseSection } from '../../store/course/types'
 import { AlertDialog, AlertTypes } from '../AlertDialog'
 import { Button } from '../Button'
 import { Modal } from '../Modal'
 import { student as studentService } from 'src/services/user'
-
+import { removeCourse } from 'src/services/course'
 export const maxCredit = 22
 export const CourseCard: React.FC<{ course: Course }> = ({ course }) => {
   const { courseId, name, credit, sections, lecturer } = course
@@ -71,14 +71,15 @@ export const CourseCard: React.FC<{ course: Course }> = ({ course }) => {
         <h1 className="text-lg">
           {courseId} - {name}
         </h1>
-        <div className="p-3">
-          <table className="table-fixed">
+        <div className="p-3 overflow-x-auto">
+          <table style={{ width: 380 }} className="table-fixed text-center">
             <thead>
               <tr>
-                <th className="w-1/6">no.</th>
-                <th className="w-4/12">day</th>
-                <th className="w-3/12">time</th>
-                <th className="">enrolled</th>
+                <th>no.</th>
+                <th>day</th>
+                <th>time</th>
+                <th>room</th>
+                <th>enrolled</th>
                 <th></th>
               </tr>
             </thead>
@@ -88,6 +89,7 @@ export const CourseCard: React.FC<{ course: Course }> = ({ course }) => {
                   <td>{sec.sectionId}</td>
                   <td>{sec.day}</td>
                   <td>{sec.time}</td>
+                  <td>{sec.room}</td>
                   <td>
                     {sec.enrolledPerson.length}/
                     {sec.seat + sec.enrolledPerson.length}
@@ -105,9 +107,7 @@ export const CourseCard: React.FC<{ course: Course }> = ({ course }) => {
                             .map((course) => course.credit)
                             .reduce((acc, cur) => acc + cur, 0) === maxCredit
                         }
-                        px={2}
-                        py={1}
-                        bg="green-300"
+                        className="mx-2 bg-green-300"
                       >
                         <span className="text-sm">Enroll</span>
                       </Button>
@@ -148,6 +148,7 @@ export const UserCourseCard: React.FC<{ course: Course; type: UserType }> = ({
   type = 'student',
 }) => {
   const dispatch = useDispatch<Dispatch<StoreEvent>>()
+  const [sectionsModal, setSectionModal] = useState<boolean>(false)
   const [openModal, setModalOpen] = useState<boolean>(false)
   const [alertMessage, setMessage] = useState<{
     message: string
@@ -158,6 +159,27 @@ export const UserCourseCard: React.FC<{ course: Course; type: UserType }> = ({
   const { student } = useSelector((state: RootState) => state.user)
 
   const { firstName, lastName } = course.lecturer.teacherInfo
+
+  const [sectionDetail, setSecDetail] = useState<CourseSection>()
+
+  const deleteCourse = async () => {
+    try {
+      setModalOpen(false)
+      console.log(course.courseId)
+
+      const res = await removeCourse(course.courseId)
+      dispatch({ type: 'REMOVE_COURSE', payload: res.dataResponse.courseId })
+
+      setMessage({
+        message: res.message,
+        type: 'success',
+        open: true,
+        completeData: res.dataResponse.courseId,
+      })
+    } catch (err) {
+      setMessage({ message: err.message, type: 'danger', open: true })
+    }
+  }
 
   const drop = async () => {
     try {
@@ -182,20 +204,61 @@ export const UserCourseCard: React.FC<{ course: Course; type: UserType }> = ({
       }
     } catch (err) {
       console.log(err)
-
       setMessage({ message: err.message, type: 'danger', open: true })
     }
   }
 
+  useEffect(() => {
+    const secDetail = course.sections.find((sec) =>
+      sec.enrolledPerson.find((s) => s.studentId === student?.studentId)
+    )
+    setSecDetail(secDetail)
+  }, [])
+
   return (
     <>
+      {type === 'teacher' && (
+        <Modal
+          title={`${course.courseId} - ${course.name}`}
+          isOpen={sectionsModal}
+          onCancel={() => setSectionModal(false)}
+        >
+          <div className="overflow-x-auto">
+            <table style={{ width: 380 }} className="table-fixed text-center">
+              <thead>
+                <tr>
+                  <th>no.</th>
+                  <th>day</th>
+                  <th>time</th>
+                  <th>room</th>
+                  <th>enrolled</th>
+                </tr>
+              </thead>
+              <tbody>
+                {course.sections.map((sec) => (
+                  <tr key={sec.sectionId}>
+                    <td>{sec.sectionId}</td>
+                    <td>{sec.day}</td>
+                    <td>{sec.time}</td>
+                    <td>{sec.room}</td>
+                    <td>
+                      {sec.enrolledPerson.length}/
+                      {sec.seat + sec.enrolledPerson.length}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </Modal>
+      )}
       <AlertDialog
         title={alertMessage.message}
         isOpen={alertMessage.open}
         type={alertMessage.type}
         onConfirm={() => {
+          setMessage({ ...alertMessage, open: false })
           if (alertMessage.completeData) {
-            setMessage({ ...alertMessage, open: false })
             dispatch({
               type: 'DELETE_MY_COURSE',
               payload: alertMessage.completeData,
@@ -207,27 +270,43 @@ export const UserCourseCard: React.FC<{ course: Course; type: UserType }> = ({
       <AlertDialog
         isOpen={openModal}
         type="danger"
-        onConfirm={drop}
+        onConfirm={type === 'student' ? drop : deleteCourse}
         onCancel={() => setModalOpen(false)}
-        title={type === 'student' ? 'Drop ?' : 'Close ?'}
-        content={`Do you want to ${type === 'student' ? 'drop' : 'close'} ${
+        title={type === 'student' ? 'Drop ?' : 'Delete ?'}
+        content={`Do you want to ${type === 'student' ? 'drop' : 'delete'} ${
           course.courseId
         } - ${course.name}`}
       />
 
-      <div className="shadow-sm mb-4 rounded-lg w-full h-36 p-3 bg-white flex flex-col sm:flex-row">
+      <div className="shadow-sm mb-4 rounded-lg w-full h-max p-3 bg-white flex flex-col sm:flex-row">
         <div className="flex flex-col justify-start sm:justify-around sm:px-2">
           <p>
             {course.courseId} - {course.name}
           </p>
-          <p>credits : {course.credit}</p>
+          {type === 'student' && sectionDetail && (
+            <>
+              <p>Section : {sectionDetail.sectionId}</p>
+              <p>Day : {sectionDetail.day}</p>
+              <p>Time : {sectionDetail.time}</p>
+              <p>Room : {sectionDetail.room}</p>
+            </>
+          )}
+          <p>Credits : {course.credit}</p>
           <p>
-            lecturer : {firstName} {lastName}
+            Lecturer : {firstName} {lastName}
           </p>
         </div>
         <div className="flex flex-1 items-center sm:px-4 sm:justify-end">
+          {type === 'teacher' && (
+            <Button
+              className="bg-blue-400 mx-2"
+              onClick={() => setSectionModal(true)}
+            >
+              Sections
+            </Button>
+          )}
           <Button onClick={() => setModalOpen(true)} className="bg-red-400">
-            {type === 'student' ? 'Drop' : 'Close'}
+            {type === 'student' ? 'Drop' : 'Delete'}
           </Button>
         </div>
       </div>

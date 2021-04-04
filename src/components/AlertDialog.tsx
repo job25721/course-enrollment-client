@@ -79,22 +79,22 @@ export const AlertDialog: FunctionComponent<Props> = ({
           <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
             <button
               onClick={onConfirm}
-              className={`w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-${
+              className={`w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 ${
                 type === 'danger'
-                  ? 'red-600'
+                  ? 'bg-red-600'
                   : type === 'warning'
-                  ? 'yellow-300'
+                  ? 'bg-yellow-300'
                   : type === 'success'
-                  ? 'green-500'
-                  : ''
-              } text-base font-medium text-white hover:bg-${
+                  ? 'bg-green-500'
+                  : null
+              } text-base font-medium text-white ${
                 type === 'danger'
-                  ? 'red-500'
+                  ? 'hover:bg-red-500'
                   : type === 'warning'
-                  ? 'yellow-400'
+                  ? 'hover:bg-yellow-400'
                   : type === 'success'
-                  ? 'green-400'
-                  : ''
+                  ? 'hover:bg-green-400'
+                  : null
               } focus:outline-none sm:ml-3 sm:w-auto sm:text-sm`}
             >
               OK

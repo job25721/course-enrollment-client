@@ -14,15 +14,11 @@ const getCourseById = (id: number) =>
     .then((res) => res.data)
 
 const addNewCourse = (course: Course) =>
-  api.post<ApiCourseResponse>('/courses', course).then((res) => res)
+  api.post<ApiCourseResponse>('/courses', course).then((res) => res.data)
 
 const removeCourse = (id: number) =>
   api
-    .delete<ApiCourseResponse>('/courses', {
-      params: {
-        cid: id,
-      },
-    })
+    .post<ApiCourseResponse>(`/course/delete?cid=${id}`)
     .then((res) => res.data)
 
 export { getAllCourses, getCourseById, addNewCourse, removeCourse }

@@ -78,7 +78,7 @@ const Index = () => {
             setPlaceholder('student')
             setLogin('')
           }}
-          mx={2}
+          className="mx-2"
           style={{ backgroundColor: '#4BABDC' }}
         >
           Student
@@ -88,7 +88,7 @@ const Index = () => {
             setPlaceholder('teacher')
             setLogin('')
           }}
-          mx={2}
+          className="mx-2"
           style={{ backgroundColor: '#9ABF53' }}
         >
           Teacher

@@ -20,6 +20,7 @@ export interface CourseSection {
   day: string
   time: string
   enrolledPerson: Student[]
+  room: string
 }
 
 export interface Course {

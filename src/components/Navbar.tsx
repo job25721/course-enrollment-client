@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { Dispatch, useEffect } from 'react'
+import { Dispatch, useEffect, useState } from 'react'
 
 import {
   HomeOutline,
@@ -11,6 +11,7 @@ import {
 } from 'react-ionicons'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState, StoreEvent } from 'src/store'
+import { AlertDialog, AlertTypes } from './AlertDialog'
 
 const Navbar: React.FC = ({ children }) => {
   const router = useRouter()
@@ -18,7 +19,17 @@ const Navbar: React.FC = ({ children }) => {
 
   const dispatch = useDispatch<Dispatch<StoreEvent>>()
   const { student, teacher } = useSelector((state: RootState) => state.user)
-
+  const [alertModal, setAlert] = useState<{
+    message: string
+    type: AlertTypes
+    isOpen: boolean
+    toPage: string
+  }>({
+    message: '',
+    type: 'danger',
+    isOpen: false,
+    toPage: '',
+  })
   useEffect(() => {
     const localStoredUser = localStorage.getItem('user')
     if (localStoredUser) {
@@ -36,10 +47,12 @@ const Navbar: React.FC = ({ children }) => {
 
   const confirmChangePage = (page: string) => {
     if (pathname === '/course/add') {
-      const r = window.confirm('ต้องก่าารเปลี่ยนหน้า')
-      if (r) {
-        router.push(`/${page}`)
-      }
+      setAlert({
+        message: 'Do you want to discard all and change page',
+        isOpen: true,
+        type: 'warning',
+        toPage: page,
+      })
       return
     }
     return router.push(`/${page}`)
@@ -49,7 +62,7 @@ const Navbar: React.FC = ({ children }) => {
       className="flex flex-col-reverse h-screen bg-blue- w-full sm:flex-row"
       style={{ backgroundColor: '#f5f5f5' }}
     >
-      <div className="bg-white justify-around rounded-2xl items-center flex flex-row shadow-md w-full h-20 sm:flex-col sm:w-20 sm:h-full sm:justify-center sm:shadow-md">
+      <div className="bg-white justify-around  items-center flex flex-row shadow-md w-full h-20 sm:flex-col sm:w-20 sm:h-full sm:justify-center sm:shadow-md">
         <button
           onClick={() => confirmChangePage('course')}
           className="my-4 focus:outline-none"
@@ -130,6 +143,13 @@ const Navbar: React.FC = ({ children }) => {
             </>
           )}
         </div>
+        <AlertDialog
+          isOpen={alertModal.isOpen}
+          type={alertModal.type}
+          title={alertModal.message}
+          onCancel={() => setAlert({ ...alertModal, isOpen: false })}
+          onConfirm={() => router.push(`/${alertModal.toPage}`)}
+        />
         {children}
       </div>
     </div>

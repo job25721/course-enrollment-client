@@ -1,4 +1,10 @@
-import { CSSProperties, HTMLAttributes, MouseEvent } from 'react'
+import {
+  CSSProperties,
+  HTMLAttributes,
+  MouseEvent,
+  useEffect,
+  useState,
+} from 'react'
 
 interface Props {
   style?: CSSProperties
@@ -16,26 +22,40 @@ export const Button: React.FC<Props> = ({
   children,
   style,
   onClick,
-  bg,
-  mx,
-  my,
-  px,
-  py,
   className = '',
   disabled = false,
-}) => (
-  <button
-    onClick={onClick}
-    style={style}
-    disabled={disabled}
-    className={`px-${px ? px : 4} py-${
-      py ? py : 2
-    } text-white shadow-sm rounded-md focus:outline-none mx-${mx ? mx : 0} my${
-      my ? my : 0
-    } ${
-      disabled ? 'bg-gray-300' : bg && !disabled ? `bg-${bg}` : ''
-    } ${className}`}
-  >
-    {children}
-  </button>
-)
+}) => {
+  const [btnClass, setClass] = useState('')
+  useEffect(() => {
+    setClass(className)
+  }, [className])
+
+  useEffect(() => {
+    if (disabled) {
+      const x = btnClass.search('bg')
+      if (x !== -1) {
+        let i = x
+        while (true) {
+          if (btnClass[i] === undefined || btnClass[i] === ' ') {
+            break
+          } else {
+            i++
+          }
+        }
+        const res = btnClass.substr(x, i)
+        setClass(btnClass.replace(res, 'bg-gray-300'))
+      }
+    }
+  }, [disabled, btnClass])
+  return (
+    <button
+      onClick={onClick}
+      style={style}
+      disabled={disabled}
+      className={`px-4 py-2 text-white shadow-sm rounded-md focus:outline-none
+      ${disabled ? 'bg-gray-300' : null} ${btnClass}`}
+    >
+      {children}
+    </button>
+  )
+}
