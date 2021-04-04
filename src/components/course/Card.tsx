@@ -331,27 +331,33 @@ export const UserCourseCard: React.FC<UserCourseCardProps> = ({
               Sections
             </Button>
           )}
-          <div className="flex flex-col items-end">
-            <label>Expected GPA</label>
-            <select
-              value={ctx?.expected.find((c) => c.id === course.courseId)?.gpa}
-              onChange={({ target }) =>
-                ctx?.setExpected(
-                  ctx.expected.map((item) =>
-                    item.id === course.courseId
-                      ? { ...item, gpa: parseFloat(target.value) }
-                      : item
-                  )
-                )
-              }
-              className="px-4 py-2 rounded shadow-sm focus:outline-none cursor-pointer mb-2"
-            >
-              {GPA.map(({ key, value }) => (
-                <option key={key} value={value}>
-                  {key}
-                </option>
-              ))}
-            </select>
+          <div className="flex sm:flex-col items-center sm:items-end">
+            {type === 'student' && (
+              <>
+                <label>Expected GPA</label>
+                <select
+                  value={
+                    ctx?.expected.find((c) => c.id === course.courseId)?.gpa
+                  }
+                  onChange={({ target }) =>
+                    ctx?.setExpected(
+                      ctx.expected.map((item) =>
+                        item.id === course.courseId
+                          ? { ...item, gpa: parseFloat(target.value) }
+                          : item
+                      )
+                    )
+                  }
+                  className="px-4 py-2 rounded shadow-sm focus:outline-none cursor-pointer mx-4 sm:mx-1 sm:mb-2"
+                >
+                  {GPA.map(({ key, value }) => (
+                    <option key={key} value={value}>
+                      {key}
+                    </option>
+                  ))}
+                </select>
+              </>
+            )}
             <Button onClick={() => setModalOpen(true)} className="bg-red-400">
               {type === 'student' ? 'Drop' : 'Delete'}
             </Button>
