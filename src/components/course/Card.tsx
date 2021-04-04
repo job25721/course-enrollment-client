@@ -75,8 +75,10 @@ export const CourseCard: React.FC<{ course: Course }> = ({ course }) => {
           <table className="table-fixed">
             <thead>
               <tr>
-                <th className="w-2/4">section</th>
-                <th className="w-full">enrolled</th>
+                <th className="w-1/6">no.</th>
+                <th className="w-4/12">day</th>
+                <th className="w-3/12">time</th>
+                <th className="">enrolled</th>
                 <th></th>
               </tr>
             </thead>
@@ -84,6 +86,8 @@ export const CourseCard: React.FC<{ course: Course }> = ({ course }) => {
               {sections.map((sec) => (
                 <tr key={sec.sectionId}>
                   <td>{sec.sectionId}</td>
+                  <td>{sec.day}</td>
+                  <td>{sec.time}</td>
                   <td>
                     {sec.enrolledPerson.length}/
                     {sec.seat + sec.enrolledPerson.length}

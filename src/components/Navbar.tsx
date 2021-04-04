@@ -33,6 +33,17 @@ const Navbar: React.FC = ({ children }) => {
       }
     }
   }, [])
+
+  const confirmChangePage = (page: string) => {
+    if (pathname === '/course/add') {
+      const r = window.confirm('ต้องก่าารเปลี่ยนหน้า')
+      if (r) {
+        router.push(`/${page}`)
+      }
+      return
+    }
+    return router.push(`/${page}`)
+  }
   return (
     <div
       className="flex flex-col-reverse h-screen bg-blue- w-full sm:flex-row"
@@ -40,7 +51,7 @@ const Navbar: React.FC = ({ children }) => {
     >
       <div className="bg-white justify-around rounded-2xl items-center flex flex-row shadow-md w-full h-20 sm:flex-col sm:w-20 sm:h-full sm:justify-center sm:shadow-md">
         <button
-          onClick={() => router.push('/course')}
+          onClick={() => confirmChangePage('course')}
           className="my-4 focus:outline-none"
         >
           <HomeOutline
@@ -51,11 +62,11 @@ const Navbar: React.FC = ({ children }) => {
         </button>
         {teacher && (
           <button
-            onClick={() => router.push('/add')}
+            onClick={() => confirmChangePage('course/add')}
             className="my-4 focus:outline-none"
           >
             <AddOutline
-              {...(pathname === '/add'
+              {...(pathname === '/course/add'
                 ? { height: '30px', width: '30px' }
                 : { color: 'rgb(200,200,200)' })}
             />
@@ -63,7 +74,7 @@ const Navbar: React.FC = ({ children }) => {
         )}
         {(student || teacher) && (
           <button
-            onClick={() => router.push('/user')}
+            onClick={() => confirmChangePage('user')}
             className="my-4 focus:outline-none"
           >
             <PersonOutline

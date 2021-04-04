@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react'
+import { FormEvent, useEffect, useState } from 'react'
 import { LogInOutline } from 'react-ionicons'
 import { Button } from '../src/components/Button'
 import { Input } from '../src/components/Input'
@@ -16,6 +16,12 @@ const Index = () => {
     type: AlertTypes
     open: boolean
   }>({ message: '', type: 'success', open: false })
+
+  useEffect(() => {
+    if (localStorage.getItem('user')) {
+      router.push('/course')
+    }
+  }, [])
 
   const login = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
