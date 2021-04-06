@@ -97,8 +97,14 @@ const Index = () => {
       <form onSubmit={login} className="flex">
         <Input
           type="text"
-          className="rounded-3xl w-auto"
-          placeholder={`type a ${placeholder} id...`}
+          className={`rounded-xl w-auto border-1 ${
+            placeholder === 'student' ? 'border-blue-200' : 'border-green-200'
+          } focus:ring ${
+            placeholder === 'student' ? 'ring-blue-100' : 'ring-green-50'
+          }`}
+          placeholder={`type a ${placeholder} ${
+            placeholder === 'student' ? 'id' : 'email'
+          }...`}
           value={loginId}
           onChange={(e) => setLogin(e.currentTarget.value)}
         />

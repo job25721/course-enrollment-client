@@ -73,7 +73,7 @@ const Course = () => {
         <Input
           placeholder="Search..."
           onChange={(e) => search(e.target.value)}
-          className="rounded-3xl py-2 focus:border-blue-300 shadow-sm my-2"
+          className="rounded-3xl py-2 focus:ring ring-blue-100 shadow-sm my-2"
         />
         <button className="px-4 py-4 rounded-3xl focus:outline-none">
           <SearchOutline />
